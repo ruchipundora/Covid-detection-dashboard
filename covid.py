@@ -270,6 +270,123 @@ st.markdown("""
                 .o{
                     color:orange;
                 }
+
+               
+
+                /* Table Styles */
+
+                .fl-table {
+                    border-radius: 5px;
+                    font-size: 12px;
+                    font-weight: normal;
+                    border: none;
+                    border-collapse: collapse;
+                    width: 100%;
+                    max-width: 100%;
+                    white-space: nowrap;
+                    background-color: white;
+                }
+
+                .fl-table td, .fl-table th {
+                    text-align: center;
+                    padding: 8px;
+                }
+
+                .fl-table td ,th{
+                    border-right: 1px solid #f8f8f8;
+                    font-size: 12px;
+                }
+
+                .fl-table thead th {
+                    color: #ffffff;
+                    background: #4FC3A1;
+                }
+
+
+                .fl-table thead th:nth-child(odd) {
+                    color: #ffffff;
+                    background: #324960;
+                }
+
+                .fl-table tr:nth-child(even) {
+                    background: #F8F8F8;
+                }
+
+                /* Responsive */
+
+                @media (max-width: 767px) {
+                   
+                    .fl-table {
+                        display: block;
+                        width: 100%;
+                    }
+                    .table-wrapper:before{
+                        content: "Scroll horizontally >";
+                        display: block;
+                        text-align: right;
+                        font-size: 11px;
+                        color: white;
+                        padding: 0 0 10px;
+                    }
+                    .fl-table thead, .fl-table tbody, .fl-table thead th {
+                        display: block;
+                    }
+                    .fl-table thead th:last-child{
+                        border-bottom: none;
+                    }
+                    .fl-table thead {
+                        float: left;
+                    }
+                    .fl-table tbody {
+                        width: auto;
+                        position: relative;
+                        overflow-x: auto;
+                    }
+                    .fl-table td, .fl-table th {
+                        padding: 20px .625em .625em .625em;
+                        height: 60px;
+                        vertical-align: middle;
+                        box-sizing: border-box;
+                        overflow-x: hidden;
+                        overflow-y: auto;
+                        width: 120px;
+                        font-size: 13px;
+                        text-overflow: ellipsis;
+                    }
+                    .fl-table thead th {
+                        text-align: left;
+                        border-bottom: 1px solid #f7f7f9;
+                    }
+                    .fl-table tbody tr {
+                        display: table-cell;
+                    }
+                    .fl-table tbody tr:nth-child(odd) {
+                        background: none;
+                    }
+                    .fl-table tr:nth-child(even) {
+                        background: transparent;
+                    }
+                    .fl-table tr td:nth-child(odd) {
+                        background: #F8F8F8;
+                        border-right: 1px solid #E6E4E4;
+                    }
+                    .fl-table tr td:nth-child(even) {
+                        border-right: 1px solid #E6E4E4;
+                    }
+                    .fl-table tbody td {
+                        display: block;
+                        text-align: center;
+                    }
+                }
+                .tableheadingset{
+                   width:100%;
+                   margin:auto;
+                   text-align: center; 
+                   color: Black; 
+                   margin-bottom:20px ;
+                   padding:2%;
+                   font-family: 'Libre Franklin', sans-serif;
+                }
                 </style>""",unsafe_allow_html=True)
 
 fig = go.Figure()
@@ -634,26 +751,38 @@ def Vaccine():
     r=requests.get(url)
     df=json_normalize(r.json())
 
-    st.markdown(" <h1 class='Title'>Information Regarding Vaccine's </h1>",unsafe_allow_html=True)
+    st.markdown(" <h1 class='tableheadingset'>Information Regarding Vaccine's </h1>",unsafe_allow_html=True)
 
-    
     def vacapi():
         struct=""   
         for i in range(37):
-            structure="""<div class='grid-item'><ul>
-                            <h4 class='Title'>"""+df.vacc_st_data[0][i]['st_name']+"""</h4>
-                            <p><b>Sr. Citizen 1st Dose: </b><span>"""+df.vacc_st_data[0][i]['dose1']+"""</span></p>
-                            <p><b>Adult 1st Dose: </b><span>"""+df.vacc_st_data[0][i]['dose2']+"""</span></p>
-                            <p><b class='highlight'>Total 1st Dose: </b><span>"""+df.vacc_st_data[0][i]['total_doses']+"""</span></p>
-                            <p><b>Sr. Citizen 2nd Dose: </b><span>"""+df.vacc_st_data[0][i]['last_dose1']+"""</span></p>
-                            <p><b>Adult 2nd Dose: </b><span>"""+df.vacc_st_data[0][i]['last_dose2']+"""</span></p>
-                            <p><b class='highlight'>Total 2nd Dose: </b><span>"""+df.vacc_st_data[0][i]['last_total_doses']+"""</span></p>
-                        </ul></div>"""
+            structure="""<tr>
+                            <td>"""+df.vacc_st_data[0][i]['st_name']+"""</td>
+                            <td>"""+df.vacc_st_data[0][i]['dose1']+"""</td>
+                            <td>"""+df.vacc_st_data[0][i]['dose2']+"""</td>
+                            <td>"""+df.vacc_st_data[0][i]['total_doses']+"""</td>
+                            <td>"""+df.vacc_st_data[0][i]['last_dose1']+"""</td>
+                            <td>"""+df.vacc_st_data[0][i]['last_dose2']+"""</td>
+                            <td>"""+df.vacc_st_data[0][i]['last_total_doses']+"""</td>
+                        </tr>"""
             struct+=structure
         return struct
 
     structure=vacapi()
-    st.markdown("""<div class='grid'>"""+structure+"""</div>""",unsafe_allow_html=True)
+    st.markdown("""<div class="table-wrapper">
+        <table class="fl-table">
+    <thead>
+        <tr>
+        <th class="header">State Name</th>
+        <th class="header">Sr. Citizen 1st Dose</th>
+        <th class="header">Adult 1st Dose</th>
+        <th class="header">Total 1st Dose</th>
+        <th class="header">Sr. Citizen 2nd Dose</th>
+        <th class="header">Adult 2nd Dose</th>
+        <th class="header">Total 2nd Dose</th>
+        </tr>
+    </thead>
+    <tbody>"""+structure+"""</tbody></table></div>""",unsafe_allow_html=True)
     made_by()
 
 
